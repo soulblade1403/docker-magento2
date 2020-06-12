@@ -2,7 +2,7 @@ version: '3'
 
 services:
   magento2:
-    image: secomm/centos7-app:7.1
+    image: secomm/centos7-app:7.2
     expose:
       - 80
     environment:
