@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  magento2:
+    image: secomm/centos7-app:7.1
+    expose:
+      - 80
+    environment:
+      VIRTUAL_HOST: ${VHOST}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ${VHOST}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+      DB_HOST: 68.183.191.235
+      DB_USER: ${USER_DB}
+      DB_PASSWORD: ${PASS_DB}
+      M2SETUP_DB_HOST: 68.183.191.235
+      M2SETUP_DB_NAME: ${DB}
+      M2SETUP_DB_USER: ${USER_DB}
+      M2SETUP_DB_PASSWORD: ${PASS_DB}
+      M2SETUP_BASE_URL: http://${VHOST}/
+      M2SETUP_BASE_URL_SECURE: https://${VHOST}/
+      M2SETUP_BACKEND_FRONTNAME: admin
+      M2SETUP_ADMIN_FIRSTNAME: Admin
+      M2SETUP_ADMIN_LASTNAME: User
+      M2SETUP_ADMIN_EMAIL: ${EMAIL}
+      M2SETUP_ADMIN_USER: ${ADMIN_USER}
+      M2SETUP_ADMIN_PASSWORD: ${ADMIN_PASS}
+      M2SETUP_CURRENCY: AUD
+      M2SETUP_LANGUAGE: en_US
+      M2SETUP_TIMEZONE: Australia/Melbourne
+      M2SETUP_USE_REWRITES: 1
+      M2SETUP_USE_SECURE: 1
+      M2SETUP_USE_SECURE_ADMIN: 1
+#      M2SETUP_USE_SAMPLE_DATA_STRING: 'true'
+    volumes:
+      - ./src:/var/www/html:consistent
+      - ./data/media:/var/www/html/pub/media:consistent
+#      - ./data/var:/var/www/html/var:consistent
+      - ./.composer:/var/www/.composer:consistent
+      - ./.env/mage-setup:/usr/bin/mage-setup
+      - ./.env/mage-upgrade:/usr/bin/mage-upgrade
+      - ./.env/mage-cron:/usr/bin/mage-cron
+    container_name: '${PROJECT}-app'
+
+networks:
+  default:
+    external:
+      name: reverse-proxy

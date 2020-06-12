@@ -1,0 +1,8 @@
+PROJECT=pj
+VHOST=pj.local
+DB=db
+USER_DB=root
+PASS_DB=root
+ADMIN_USER=admin
+ADMIN_PASS=admin1212
+EMAIL=test@example.com

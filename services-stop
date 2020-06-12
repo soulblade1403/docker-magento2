@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -aeuo pipefail
+
+# create the dotenv file if it doesn't exist
+if [ ! -f .vars ]; then
+  cp .vars.default .vars
+fi
+
+source .vars
+
+# stop and remove container
+docker-compose down
+
+# remove volumes
+docker volume prune -f

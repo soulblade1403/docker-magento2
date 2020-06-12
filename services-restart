@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -aeuo pipefail
+
+# create the dotenv file if it doesn't exist
+if [ ! -f .vars ]; then
+  cp .vars.default .vars
+fi
+
+source .vars
+
+docker container restart ${PROJECT}-app
+
+docker exec -it $PROJECT-app mage-upgrade
+
+echo "The upgrade script has completed execution."

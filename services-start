@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -aeuo pipefail
+
+# create the dotenv file if it doesn't exist
+if [ ! -f .vars ]; then
+  cp .vars.default .vars
+else
+  rm .vars
+  cp .vars.default .vars
+fi
+
+source .vars
+
+rm -f docker-compose.yml; envsubst < "template.yml" > "docker-compose.yml";
+
+echo "Start Containers"
+docker-compose up -d
+
+echo "Check container start"
+docker ps -a
+
+echo "Setup magento 2 project into docker"
+if [ -f ./data/config.php ]; then
+  cp ./data/config.php ./src/app/etc/config.php
+fi
+
+if [ -f ./data/env.php ]; then
+  cp ./data/env.php ./src/app/etc/env.php
+fi
+
+if [ -f ./src/app/etc/env.php ]; then
+  docker exec -it $PROJECT-app mage-upgrade
+  docker exec -it $PROJECT-app mage-cron
+else
+  docker exec -it $PROJECT-app mage-setup
+  docker exec -it $PROJECT-app mage-cron
+fi
+
+echo "The setup script has completed execution."
+echo "
+===================== 🚀 Done 🚀 ===================
+      Created by Soulblade
+      Access your new links:
+      🌎 Web server: http://$VHOST
+      ⚙️ PHPMyAdmin: http:/27.74.249.220:8080
+===================== 🚀 Done 🚀 ==================="
+

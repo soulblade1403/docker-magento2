@@ -1,0 +1,8 @@
+/src/*
+!/src/.htaccess
+/data/mysql/db/*
+!/data/mysql/db/.htaccess
+/data/mysql/setup/*
+!/data/mysql/setup/.htaccess
+docker-compose.yml
+.vars
